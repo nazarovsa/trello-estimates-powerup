@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 16px;
+      margin: 0;
+    }
+    h3 {
+      margin-top: 0;
+      color: #172b4d;
+      font-size: 16px;
+    }
+    p {
+      color: #5e6c84;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .info {
+      background: #f4f5f7;
+      padding: 12px;
+      border-radius: 3px;
+      margin-top: 12px;
+    }
+    .info-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #172b4d;
+    }
+  </style>
+</head>
+<body>
+  <h3>Card Estimates Power-Up</h3>
+  <p>This Power-Up allows you to:</p>
+  <div class="info">
+    <div class="info-title">📊 Set estimates on cards</div>
+    Click on any card badge or detail badge to set a numeric estimate
+  </div>
+  <div class="info">
+    <div class="info-title">🔢 View column totals</div>
+    Click "Show Estimate Total" in the list menu to see the sum of all estimates
+  </div>
+
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <script>
+    var t = TrelloPowerUp.iframe();
+  </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "Card Estimates",
+  "details": "Add numeric estimates to cards and see column totals",
+  "icon": {
+    "url": "https://cdn-icons-png.flaticon.com/512/2920/2920623.png"
+  },
+  "author": "Custom Power-Up",
+  "capabilities": [
+    "card-badges",
+    "card-detail-badges",
+    "list-actions",
+    "show-settings"
+  ],
+  "connectors": {
+    "iframe": {
+      "url": "./index.html"
+    }
+  }
+}
