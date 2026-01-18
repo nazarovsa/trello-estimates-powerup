@@ -2,7 +2,7 @@
   "name": "Card Estimates",
   "details": "Add numeric estimates to cards and see column totals",
   "icon": {
-    "url": "https://cdn-icons-png.flaticon.com/512/2920/2920623.png"
+    "url": "./icon.png"
   },
   "author": "Custom Power-Up",
   "capabilities": [

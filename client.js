@@ -1,7 +1,7 @@
 /* global TrelloPowerUp */
 
 var ESTIMATE_KEY = 'estimate';
-var ICON_URL = 'https://cdn-icons-png.flaticon.com/512/2920/2920623.png';
+var ICON_URL = './icon.png';
 
 // Helper function to get estimate from card
 var getEstimate = function(t) {
