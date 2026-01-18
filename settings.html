@@ -44,7 +44,20 @@
     Click "Show Estimate Total" in the list menu to see the sum of all estimates
   </div>
 
-  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <script>
+    // Load Trello library with fallback
+    (function() {
+      var script = document.createElement('script');
+      script.src = 'https://p.trellocdn.com/power-up.min.js';
+      script.onerror = function() {
+        console.log('CDN failed, loading local library...');
+        var fallback = document.createElement('script');
+        fallback.src = './power-up.min.js';
+        document.head.appendChild(fallback);
+      };
+      document.head.appendChild(script);
+    })();
+  </script>
   <script>
     var t = TrelloPowerUp.iframe();
   </script>

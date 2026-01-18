@@ -69,7 +69,84 @@
   </style>
 </head>
 <body>
-  <script src="https://p.trellocdn.com/power-up.min.js"></script>
-  <script src="./client.js"></script>
+  <script>
+    // Smart loader with fallback - optimized for faster loading
+    (function() {
+      var TRELLO_CDN = 'https://p.trellocdn.com/power-up.min.js';
+      var LOCAL_FALLBACK = './power-up.min.js';
+      var TIMEOUT = 3000; // 3 seconds timeout
+
+      function loadScript(src, onSuccess, onError) {
+        var script = document.createElement('script');
+        var timeout;
+        var loaded = false;
+        
+        script.onload = function() {
+          if (!loaded) {
+            loaded = true;
+            clearTimeout(timeout);
+            if (onSuccess) onSuccess();
+          }
+        };
+        
+        script.onerror = function() {
+          if (!loaded) {
+            loaded = true;
+            clearTimeout(timeout);
+            if (onError) onError();
+          }
+        };
+
+        // Timeout fallback
+        timeout = setTimeout(function() {
+          if (!loaded) {
+            loaded = true;
+            console.warn('Script loading timeout:', src);
+            if (onError) onError();
+          }
+        }, TIMEOUT);
+
+        script.src = src;
+        document.head.appendChild(script);
+      }
+
+      function initPowerUp() {
+        if (typeof TrelloPowerUp === 'undefined') {
+          console.error('TrelloPowerUp not loaded');
+          return;
+        }
+        
+        // Load client.js after TrelloPowerUp is ready
+        var clientScript = document.createElement('script');
+        clientScript.src = './client.js';
+        document.body.appendChild(clientScript);
+      }
+
+      // Try CDN first
+      console.log('Loading Trello Power-Up library...');
+      loadScript(
+        TRELLO_CDN,
+        function() {
+          console.log('✓ Loaded from CDN');
+          initPowerUp();
+        },
+        function() {
+          console.log('CDN failed, trying local fallback...');
+          
+          // Try local fallback
+          loadScript(
+            LOCAL_FALLBACK,
+            function() {
+              console.log('✓ Loaded from local library');
+              initPowerUp();
+            },
+            function() {
+              console.error('✗ Failed to load library from both CDN and local');
+            }
+          );
+        }
+      );
+    })();
+  </script>
 </body>
 </html>

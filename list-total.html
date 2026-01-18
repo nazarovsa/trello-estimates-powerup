@@ -31,7 +31,20 @@
     <div id="total" class="total-number">Loading...</div>
   </div>
 
-  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <script>
+    // Load Trello library with fallback
+    (function() {
+      var script = document.createElement('script');
+      script.src = 'https://p.trellocdn.com/power-up.min.js';
+      script.onerror = function() {
+        console.log('CDN failed, loading local library...');
+        var fallback = document.createElement('script');
+        fallback.src = './power-up.min.js';
+        document.head.appendChild(fallback);
+      };
+      document.head.appendChild(script);
+    })();
+  </script>
   <script>
     /* global TrelloPowerUp */
     var t = TrelloPowerUp.iframe();
