@@ -44,9 +44,10 @@
 
         var t = TrelloPowerUp.iframe();
         var ESTIMATE_KEY = 'estimate';
+        var listId = t.args[0].context.list;
 
         // Calculate total for this list
-        t.cards('all')
+        t.cards(listId)
           .then(function(cards) {
             var total = 0;
             var promises = cards.map(function(card) {
