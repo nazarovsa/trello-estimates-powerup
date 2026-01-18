@@ -3,57 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Card Estimates Power-Up</title>
-  <script>
-    // Load CSS with fallback
-    (function() {
-      var TRELLO_CDN_CSS = 'https://p.trellocdn.com/power-up.min.css';
-      var LOCAL_CSS = './power-up.min.css';
-
-      function loadCSS(href) {
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = href;
-
-        var loaded = false;
-        var timeout;
-
-        link.onload = function() {
-          if (!loaded) {
-            loaded = true;
-            clearTimeout(timeout);
-          }
-        };
-
-        link.onerror = function() {
-          if (!loaded) {
-            loaded = true;
-            clearTimeout(timeout);
-            // Load local fallback
-            var fallback = document.createElement('link');
-            fallback.rel = 'stylesheet';
-            fallback.href = LOCAL_CSS;
-            document.head.appendChild(fallback);
-          }
-        };
-
-        // Timeout fallback (2 seconds)
-        timeout = setTimeout(function() {
-          if (!loaded) {
-            loaded = true;
-            console.warn('CSS loading timeout');
-            var fallback = document.createElement('link');
-            fallback.rel = 'stylesheet';
-            fallback.href = LOCAL_CSS;
-            document.head.appendChild(fallback);
-          }
-        }, 2000);
-
-        document.head.appendChild(link);
-      }
-
-      loadCSS(TRELLO_CDN_CSS);
-    })();
-  </script>
+  <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -119,84 +69,7 @@
   </style>
 </head>
 <body>
-  <script>
-    // Smart loader with fallback - optimized for faster loading
-    (function() {
-      var TRELLO_CDN = 'https://p.trellocdn.com/power-up.min.js';
-      var LOCAL_FALLBACK = './power-up.min.js';
-      var TIMEOUT = 3000; // 3 seconds timeout
-
-      function loadScript(src, onSuccess, onError) {
-        var script = document.createElement('script');
-        var timeout;
-        var loaded = false;
-        
-        script.onload = function() {
-          if (!loaded) {
-            loaded = true;
-            clearTimeout(timeout);
-            if (onSuccess) onSuccess();
-          }
-        };
-        
-        script.onerror = function() {
-          if (!loaded) {
-            loaded = true;
-            clearTimeout(timeout);
-            if (onError) onError();
-          }
-        };
-
-        // Timeout fallback
-        timeout = setTimeout(function() {
-          if (!loaded) {
-            loaded = true;
-            console.warn('Script loading timeout:', src);
-            if (onError) onError();
-          }
-        }, TIMEOUT);
-
-        script.src = src;
-        document.head.appendChild(script);
-      }
-
-      function initPowerUp() {
-        if (typeof TrelloPowerUp === 'undefined') {
-          console.error('TrelloPowerUp not loaded');
-          return;
-        }
-        
-        // Load client.js after TrelloPowerUp is ready
-        var clientScript = document.createElement('script');
-        clientScript.src = './client.js';
-        document.body.appendChild(clientScript);
-      }
-
-      // Try CDN first
-      console.log('Loading Trello Power-Up library...');
-      loadScript(
-        TRELLO_CDN,
-        function() {
-          console.log('✓ Loaded from CDN');
-          initPowerUp();
-        },
-        function() {
-          console.log('CDN failed, trying local fallback...');
-          
-          // Try local fallback
-          loadScript(
-            LOCAL_FALLBACK,
-            function() {
-              console.log('✓ Loaded from local library');
-              initPowerUp();
-            },
-            function() {
-              console.error('✗ Failed to load library from both CDN and local');
-            }
-          );
-        }
-      );
-    })();
-  </script>
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <script src="./client.js"></script>
 </body>
 </html>

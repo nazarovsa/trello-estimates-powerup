@@ -2,40 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <script>
-    // Load CSS with fallback
-    (function() {
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://p.trellocdn.com/power-up.min.css';
-
-      var loaded = false;
-      var timeout;
-
-      link.onerror = function() {
-        if (!loaded) {
-          loaded = true;
-          clearTimeout(timeout);
-          var fallback = document.createElement('link');
-          fallback.rel = 'stylesheet';
-          fallback.href = './power-up.min.css';
-          document.head.appendChild(fallback);
-        }
-      };
-
-      timeout = setTimeout(function() {
-        if (!loaded) {
-          loaded = true;
-          var fallback = document.createElement('link');
-          fallback.rel = 'stylesheet';
-          fallback.href = './power-up.min.css';
-          document.head.appendChild(fallback);
-        }
-      }, 2000);
-
-      document.head.appendChild(link);
-    })();
-  </script>
+  <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -100,23 +67,9 @@
     <button id="clear" class="btn btn-secondary">Clear</button>
   </div>
 
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
   <script>
-    // Load Trello library with fallback
     (function() {
-      var script = document.createElement('script');
-      script.src = 'https://p.trellocdn.com/power-up.min.js';
-      script.onerror = function() {
-        console.log('CDN failed, loading local library...');
-        var fallback = document.createElement('script');
-        fallback.src = './power-up.min.js';
-        fallback.onload = initPopup;
-        document.head.appendChild(fallback);
-      };
-      script.onload = initPopup;
-      document.head.appendChild(script);
-    })();
-
-    function initPopup() {
       // Wait a bit for TrelloPowerUp to be fully initialized
       setTimeout(function() {
         if (typeof TrelloPowerUp === 'undefined') {
@@ -180,7 +133,7 @@
           }
         });
       }, 100);
-    }
+    })();
   </script>
 </body>
 </html>
