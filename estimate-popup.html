@@ -61,7 +61,7 @@
 </head>
 <body>
   <label class="label">Enter estimate (numeric value):</label>
-  <input type="number" id="estimate" class="estimate-input" placeholder="e.g., 5, 8, 13" step="0.1" autofocus>
+  <input type="number" id="estimate" class="estimate-input" placeholder="e.g., 5, 8, 13" step="0.1">
   <div class="button-group">
     <button id="save" class="btn btn-primary">Save</button>
     <button id="clear" class="btn btn-secondary">Clear</button>
@@ -76,62 +76,78 @@
         console.log('CDN failed, loading local library...');
         var fallback = document.createElement('script');
         fallback.src = './power-up.min.js';
+        fallback.onload = initPopup;
         document.head.appendChild(fallback);
       };
+      script.onload = initPopup;
       document.head.appendChild(script);
     })();
-  </script>
-  <script>
-    /* global TrelloPowerUp */
-    var t = TrelloPowerUp.iframe();
-    var ESTIMATE_KEY = 'estimate';
 
-    // Load current estimate
-    t.get('card', 'shared', ESTIMATE_KEY)
-      .then(function(estimate) {
-        if (estimate) {
-          document.getElementById('estimate').value = estimate;
+    function initPopup() {
+      // Wait a bit for TrelloPowerUp to be fully initialized
+      setTimeout(function() {
+        if (typeof TrelloPowerUp === 'undefined') {
+          console.error('TrelloPowerUp not loaded');
+          return;
         }
-      });
 
-    // Save button handler
-    document.getElementById('save').addEventListener('click', function() {
-      var value = document.getElementById('estimate').value;
-      
-      if (value === '') {
-        return t.alert({
-          message: 'Please enter a numeric value',
-          duration: 3
+        var t = TrelloPowerUp.iframe();
+        var ESTIMATE_KEY = 'estimate';
+
+        // Load current estimate
+        t.get('card', 'shared', ESTIMATE_KEY)
+          .then(function(estimate) {
+            if (estimate) {
+              document.getElementById('estimate').value = estimate;
+            }
+            // Set focus programmatically after loading
+            try {
+              document.getElementById('estimate').focus();
+            } catch(e) {
+              // Ignore focus errors in cross-origin frames
+            }
+          });
+
+        // Save button handler
+        document.getElementById('save').addEventListener('click', function() {
+          var value = document.getElementById('estimate').value;
+          
+          if (value === '') {
+            return t.alert({
+              message: 'Please enter a numeric value',
+              duration: 3
+            });
+          }
+
+          if (isNaN(parseFloat(value))) {
+            return t.alert({
+              message: 'Please enter a valid number',
+              duration: 3
+            });
+          }
+
+          t.set('card', 'shared', ESTIMATE_KEY, value)
+            .then(function() {
+              t.closePopup();
+            });
         });
-      }
 
-      if (isNaN(parseFloat(value))) {
-        return t.alert({
-          message: 'Please enter a valid number',
-          duration: 3
+        // Clear button handler
+        document.getElementById('clear').addEventListener('click', function() {
+          t.remove('card', 'shared', ESTIMATE_KEY)
+            .then(function() {
+              t.closePopup();
+            });
         });
-      }
 
-      t.set('card', 'shared', ESTIMATE_KEY, value)
-        .then(function() {
-          t.closePopup();
+        // Allow Enter key to save
+        document.getElementById('estimate').addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            document.getElementById('save').click();
+          }
         });
-    });
-
-    // Clear button handler
-    document.getElementById('clear').addEventListener('click', function() {
-      t.remove('card', 'shared', ESTIMATE_KEY)
-        .then(function() {
-          t.closePopup();
-        });
-    });
-
-    // Allow Enter key to save
-    document.getElementById('estimate').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        document.getElementById('save').click();
-      }
-    });
+      }, 100);
+    }
   </script>
 </body>
 </html>

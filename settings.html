@@ -53,13 +53,22 @@
         console.log('CDN failed, loading local library...');
         var fallback = document.createElement('script');
         fallback.src = './power-up.min.js';
+        fallback.onload = initPopup;
         document.head.appendChild(fallback);
       };
+      script.onload = initPopup;
       document.head.appendChild(script);
     })();
-  </script>
-  <script>
-    var t = TrelloPowerUp.iframe();
+
+    function initPopup() {
+      setTimeout(function() {
+        if (typeof TrelloPowerUp !== 'undefined') {
+          var t = TrelloPowerUp.iframe();
+          // Settings page doesn't need to do anything special
+          console.log('Settings page loaded');
+        }
+      }, 100);
+    }
   </script>
 </body>
 </html>

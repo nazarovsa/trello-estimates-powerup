@@ -40,39 +40,50 @@
         console.log('CDN failed, loading local library...');
         var fallback = document.createElement('script');
         fallback.src = './power-up.min.js';
+        fallback.onload = initPopup;
         document.head.appendChild(fallback);
       };
+      script.onload = initPopup;
       document.head.appendChild(script);
     })();
-  </script>
-  <script>
-    /* global TrelloPowerUp */
-    var t = TrelloPowerUp.iframe();
-    var ESTIMATE_KEY = 'estimate';
 
-    // Calculate total for this list
-    t.cards('all')
-      .then(function(cards) {
-        var total = 0;
-        var promises = cards.map(function(card) {
-          return t.get(card.id, 'shared', ESTIMATE_KEY)
-            .then(function(estimate) {
-              if (estimate && !isNaN(parseFloat(estimate))) {
-                total += parseFloat(estimate);
-              }
+    function initPopup() {
+      // Wait a bit for TrelloPowerUp to be fully initialized
+      setTimeout(function() {
+        if (typeof TrelloPowerUp === 'undefined') {
+          console.error('TrelloPowerUp not loaded');
+          document.getElementById('total').textContent = 'Error loading';
+          return;
+        }
+
+        var t = TrelloPowerUp.iframe();
+        var ESTIMATE_KEY = 'estimate';
+
+        // Calculate total for this list
+        t.cards('all')
+          .then(function(cards) {
+            var total = 0;
+            var promises = cards.map(function(card) {
+              return t.get(card.id, 'shared', ESTIMATE_KEY)
+                .then(function(estimate) {
+                  if (estimate && !isNaN(parseFloat(estimate))) {
+                    total += parseFloat(estimate);
+                  }
+                });
             });
-        });
-        
-        return Promise.all(promises).then(function() {
-          // Round to 2 decimal places
-          total = Math.round(total * 100) / 100;
-          document.getElementById('total').textContent = total;
-        });
-      })
-      .catch(function(error) {
-        document.getElementById('total').textContent = 'Error';
-        console.error(error);
-      });
+            
+            return Promise.all(promises).then(function() {
+              // Round to 2 decimal places
+              total = Math.round(total * 100) / 100;
+              document.getElementById('total').textContent = total;
+            });
+          })
+          .catch(function(error) {
+            document.getElementById('total').textContent = 'Error';
+            console.error(error);
+          });
+      }, 100);
+    }
   </script>
 </body>
 </html>
