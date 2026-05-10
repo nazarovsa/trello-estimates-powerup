@@ -44,13 +44,13 @@
 
         var t = TrelloPowerUp.iframe();
         var ESTIMATE_KEY = 'estimate';
-        var idList = t.args[0].context.list;
+        var idList = t.getContext().list;
 
         // Calculate total for this list
-        t.cards('all')
+        t.cards(['id', 'idList'])
           .then(function(cards) {
             var total = 0;
-            var promises = cards.filter(x => x.idList == idList).map(function(card) {
+            var promises = cards.filter(function(c) { return c.idList === idList; }).map(function(card) {
               return t.get(card.id, 'shared', ESTIMATE_KEY)
                 .then(function(estimate) {
                   if (estimate && !isNaN(parseFloat(estimate))) {
